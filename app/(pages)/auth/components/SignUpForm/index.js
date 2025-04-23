@@ -66,7 +66,7 @@ function SignUpForm() {
 
     useEffect(() => {
         if (user && userTable && active) {
-            setTimeout(() => router.push('/'), 250)
+            setTimeout(() => router.push('/register_hotel'), 250)
             setActive(false)
         }
     }, [active, router, user, userTable])

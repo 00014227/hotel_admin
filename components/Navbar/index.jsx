@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import Gutter from "../Gutter";
+import NavbarUserDesktop from "./UserDesktop";
 
 export default function Navbar() {
-    // const { user } = useSelector((state) => state.auth)
-    // console.log(user?.user)
+    const { user } = useSelector((state) => state.auth)
+    console.log(user?.user)
     return (
         <div className="w-full bg-white p-4 shadow-md ">
             <Gutter>
@@ -15,7 +16,7 @@ export default function Navbar() {
                             Register Hotel
                         </button>
 
-                        {/* {user?.user.email ? (
+                        {user?.user.email ? (
                             <NavbarUserDesktop userAuth={user} />
 
                         ) : (
@@ -27,7 +28,7 @@ export default function Navbar() {
                                     Sign Up
                                 </Link>
                             </>
-                        )} */}
+                        )}
 
                     </div>
                 </div>

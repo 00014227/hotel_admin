@@ -50,7 +50,7 @@ const LogInForm = () => {
 
       useEffect(() => {
         if (userTable && user && active) {
-          router.push('/')
+          router.push('/register_hotel')
           setActive(false)
         }
       }, [active, router, user, userTable])

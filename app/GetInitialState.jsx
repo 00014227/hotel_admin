@@ -10,7 +10,7 @@ export default function GetInitialState({ children }) {
           if (!data.session) {
             router.push('/auth'); // redirect to auth page
           } else {
-            router.push('/dashboard'); // or whatever your logged-in page is
+            router.push('/hotel_register'); // or whatever your logged-in page is
           }
         };
     
