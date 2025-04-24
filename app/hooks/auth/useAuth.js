@@ -50,6 +50,7 @@ export const useAuth = () => {
             dispatch(setError(err.message));
         } finally {
             dispatch(setLoading(false));
+            
         }
     };
 

@@ -1,16 +1,18 @@
 'use client';
 
 import { supabase } from '@/app/lib/supabaseClient';
+import { useParams } from 'next/navigation';
 import postcss from 'postcss';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-export default function ImageUploadForm({ formData, onUpdate }) {
+export default function RoomImageUploadForm({ formData, onUpdate }) {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { userTable } = useSelector((state) => state.auth)
+  const params = useParams()
+  const hotelId = params.id
+  
 
-  console.log(userTable, 'qoto')
   const handleImageChange = (e) => {
     if (e.target.files) {
       const fileArray = Array.from(e.target.files);
@@ -24,11 +26,11 @@ export default function ImageUploadForm({ formData, onUpdate }) {
 
     for (const image of images) {
       const fileName = image.name.replace(/\s+/g, '_'); // remove spaces
-      const path = `hotel-${Date.now()}/${fileName}`;
+      const path = `room-${Date.now()}/${fileName}`;
 
 
       const { error } = await supabase.storage
-        .from('hotels')
+        .from('rooms')
         .upload(path, image);
 
       if (error) {
@@ -37,7 +39,7 @@ export default function ImageUploadForm({ formData, onUpdate }) {
       }
 
       const { data } = supabase.storage
-        .from('hotels')
+        .from('rooms')
         .getPublicUrl(path);
 
       urls.push(data.publicUrl);
@@ -50,33 +52,27 @@ export default function ImageUploadForm({ formData, onUpdate }) {
     setLoading(true);
     const imageUrls = await uploadImages();
 
-    const { address, hotelInfo, amenities } = formData;
-    const { data, error } = await supabase.from('hotels').insert([
+    const { roomDetails, roomAmenities, images } = formData;
+    const { data, error } = await supabase.from('rooms').insert([
       {
-        name: hotelInfo.hotelName,
-        description: hotelInfo.description,
-        price: hotelInfo.price,
-        rating: hotelInfo.rating,
-        pets_allowed: hotelInfo.petsAllowed,
-        address: {
-          full: address.street,
-          region: address.city,
-          street: address.street,
-          country: address.country,
-          postalCode: address.postalCode
-        },
-        amenities,
-        image_url: imageUrls,
-        admin_id: userTable.guid 
+        hotel_id: hotelId,
+        price: roomDetails.price,
+        type: "Perfect",
+        max_guests: roomDetails.max_guest,
+        beds: roomDetails.beds,
+        bedrooms: roomDetails.bedrooms,
+        pets_allowed: true,
+        room_name: roomDetails.room_name,
+        room_images: imageUrls
       },
     ]);
 
     if (error) {
-      console.error('Hotel creation error:', error.message);
+      console.error('Room creation error:', error.message);
     } else {
-      console.log('✅ Hotel created:', data);
-      const hotelId = data[0].id;
-      router.push(`/hotels/${hotelId}/add-room`);
+      console.log('✅ Room created:', data);
+      // const hotelId = data[0].id;
+      // router.push(`/hotels/${hotelId}/add-room`);
     }
 
     setLoading(false);
@@ -84,7 +80,7 @@ export default function ImageUploadForm({ formData, onUpdate }) {
 
   return (
     <div className="max-w-xl mx-auto space-y-6 mt-8 p-6 border rounded-xl shadow">
-      <h2 className="text-2xl font-bold text-center">Upload Hotel Images</h2>
+      <h2 className="text-2xl font-bold text-center">Upload Room Images</h2>
 
       <input
         type="file"

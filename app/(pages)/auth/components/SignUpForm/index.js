@@ -12,9 +12,6 @@ function SignUpForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const [phone, setPhone] = useState("")
     const [active, setActive] = useState(false)
     const { signUp, data, isLoading, error } = useSignUp();
     const { userTable, user } = useSelector((store) => store.auth)
@@ -23,7 +20,7 @@ function SignUpForm() {
         isLoading: tableIsLoading,
         updateUserTable,
         error: tableError,
-    } = useUpdateUserTable()
+      } = useUpdateUserTable()
 
 
     const handleSubmit = async (e) => {
@@ -66,98 +63,77 @@ function SignUpForm() {
 
     useEffect(() => {
         if (user && userTable && active) {
-            setTimeout(() => router.push('/register_hotel'), 250)
-            setActive(false)
+          setTimeout(() => router.push('/'), 250)
+          setActive(false)
         }
-    }, [active, router, user, userTable])
+      }, [active, router, user, userTable])
 
-    useEffect(() => {
+      useEffect(() => {
         if (error || tableError) {
-            setActive(false)
+          setActive(false)
         }
-    }, [error, tableError])
+      }, [error, tableError])
 
     return (
-<form
-  className="flex flex-col max-w-md w-full rounded-lg shadow border"
-  onSubmit={(e) => e.preventDefault()}
->
-  <div className="border-b px-4 py-3">
-    <h1 className="text-center text-xl font-semibold text-gray-800">Sign Up</h1>
-  </div>
 
-  <div className="space-y-3 p-4">
-    <h2 className="text-lg text-gray-700 text-center">
-      Sign in to manage your listing
-    </h2>
+        <form
+            className="flex flex-col max-w-2xl w-full rounded-lg shadow-xl border-t"
+            onSubmit={(e) => e.preventDefault()}
+        >
+            <div className="border-b border-gray-300 py-4">
+                <h1 className="text-center text-2xl text-gray-800">Sign Up</h1>
+            </div>
+            <div className="space-y-5 p-8">
+                <h2 className="text-gray-800 text-3xl">Welcome to our platform</h2>
 
-    <input
-      className="w-full p-2 border rounded-md text-sm"
-      type="email"
-      placeholder="Email"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-    />
-    <input
-      className="w-full p-2 border rounded-md text-sm"
-      type="password"
-      placeholder="Password"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-    />
-    <input
-      className="w-full p-2 border rounded-md text-sm"
-      type="password"
-      placeholder="Confirm Password"
-      value={confirmPassword}
-      onChange={(e) => setConfirmPassword(e.target.value)}
-    />
-    <input
-      className="w-full p-2 border rounded-md text-sm"
-      type="text"
-      placeholder="Name"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-    />
-    <input
-      className="w-full p-2 border rounded-md text-sm"
-      type="text"
-      placeholder="Surname"
-      value={surname}
-      onChange={(e) => setSurname(e.target.value)}
-    />
-    <input
-      className="w-full p-2 border rounded-md text-sm"
-      type="text"
-      placeholder="Phone"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-    />
 
-    <button
-      className="w-full p-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
-      onClick={handleSubmit}
-      disabled={isLoading || tableIsLoading}
-    >
-      {isLoading ? 'Processing...' : 'Sign Up'}
-    </button>
+                <input
+                    className="w-full p-4 border-2 rounded-xl"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    className="w-full p-4 border-2 rounded-xl"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
 
-    <div className="flex items-center text-sm text-gray-400">
-      <div className="flex-grow border-t"></div>
-      <span className="px-2">OR</span>
-      <div className="flex-grow border-t"></div>
-    </div>
+                <input
+                    className="w-full p-4 border-2 rounded-xl"
+                    type="password"
+                    placeholder="Confirm your password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                />
 
-    <button
-      className="w-full flex items-center justify-center gap-2 border p-2 text-sm rounded-md hover:bg-gray-100"
-      disabled={isLoading}
-    >
-      <FcGoogle className="text-lg" />
-      Sign up with Google
-    </button>
-  </div>
-</form>
+                <button
+                    className="w-full p-4 bg-blue-500 text-white font-bold text-lg hover:bg-blue-700 rounded-xl"
+                    onClick={handleSubmit}
+                    disabled={isLoading || tableIsLoading}
+                >
+                    {isLoading ? 'Processing...' : 'Sign Up'}
+                </button>
 
+                <div className="flex items-center my-4">
+                    <div className="flex-grow border-t border-gray-300"></div>
+                    <span className="px-4 text-gray-500 text-sm">OR</span>
+                    <div className="flex-grow border-t border-gray-300"></div>
+                </div>
+
+                <button
+                    className="w-full flex items-center text-center border-2 border-black p-4 font-bold text-lg rounded-xl hover:bg-gray-200"
+                    // onClick={signInWithGoogle}
+                    disabled={isLoading}
+                >
+                    <FcGoogle />
+                    <span className="mx-auto">With Google</span>
+                </button>
+            </div>
+        </form>
     );
 }
 

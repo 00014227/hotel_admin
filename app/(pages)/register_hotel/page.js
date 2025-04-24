@@ -21,7 +21,6 @@ export default function RegisterHotel() {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  console.log(formData, 'foooom')
   const nextStep = () => setStep((s) => s + 1);
 
   return (

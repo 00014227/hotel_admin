@@ -1,22 +1,49 @@
-import { useRouter } from "next/navigation"
-import { useEffect } from 'react';
-import { supabase } from "./lib/supabaseClient";
+'use client'
+
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouter, usePathname } from 'next/navigation'
+import { setUser, setUserTabel } from './lib/features/auth/auth.slice'
+import { supabase } from './lib/supabaseClient'
 
 export default function GetInitialState({ children }) {
-    const router = useRouter()
-    useEffect(() => {
-        const checkUser = async () => {
-          const { data } = await supabase.auth.getSession();
-          if (!data.session) {
-            router.push('/auth'); // redirect to auth page
-          } else {
-            router.push('/hotel_register'); // or whatever your logged-in page is
-          }
-        };
-    
-        checkUser();
-      }, []);
+  const dispatch = useDispatch()
+  const { user, userTable } = useSelector((state) => state.auth)
+  const path = usePathname()
+  const router = useRouter()
 
-    return <>{children}</>
+  useEffect(() => {
+    const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL.slice(8, 28)
 
+    const authRaw = localStorage.getItem(`user-auth-${sbUrl}`)
+    const auth = authRaw && authRaw !== 'undefined' ? JSON.parse(authRaw) : null
+
+    const tableRaw = localStorage.getItem(`user-table-${sbUrl}`)
+    const table = tableRaw && tableRaw !== 'undefined' ? JSON.parse(tableRaw) : null
+
+    // Sync local storage with Redux
+    if (auth?.session?.access_token && !user) {
+      dispatch(setUser(auth))
+    }
+
+    if (table?.email && !userTable) {
+      dispatch(setUserTabel(table))
+    }
+
+    // Route protection
+    const protectRoutes = async () => {
+      const { data } = await supabase.auth.getSession()
+      const isAuthenticated = !!data.session
+
+      if (!isAuthenticated) {
+        router.push('/auth')
+      } else if (path === '/' || path.includes('/auth')) {
+        router.push('/hotel_register')
+      }
+    }
+
+    protectRoutes()
+  }, [dispatch, path, router, user, userTable])
+
+  return <>{children}</>
 }

@@ -72,7 +72,7 @@ const LogInForm = () => {
                 <h1 className="text-center text-2xl text-gray-800">Log In</h1>
             </div>
             <div className="space-y-5 p-8">
-                <h2 className="text-gray-800 text-3xl">Sign in to manage your listing.</h2>
+                <h2 className="text-gray-800 text-3xl">Welcome to our platform</h2>
             
 
                 <input
