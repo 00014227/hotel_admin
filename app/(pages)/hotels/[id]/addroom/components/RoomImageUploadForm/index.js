@@ -11,7 +11,7 @@ export default function RoomImageUploadForm({ formData, onUpdate }) {
   const [loading, setLoading] = useState(false);
   const params = useParams()
   const hotelId = params.id
-  
+  console.log(typeof (formData.roomAmenities), 'fuuuuuccc')
 
   const handleImageChange = (e) => {
     if (e.target.files) {
@@ -65,13 +65,26 @@ export default function RoomImageUploadForm({ formData, onUpdate }) {
         room_name: roomDetails.room_name,
         room_images: imageUrls
       },
-    ]);
+    ])
+    .select()
+    .single()
 
     if (error) {
       console.error('Room creation error:', error.message);
     } else {
       console.log('✅ Room created:', data);
-      // const hotelId = data[0].id;
+      const roomId = data.id;
+      console.log(roomId, 'rooo')
+      const roomAmenitiesInsert = roomAmenities.map((amenityId) => ({
+        room_id: roomId,
+        amenity_id: amenityId
+      }));
+
+      const { error: amenityError } = await supabase
+        .from('room_amenities')
+        .insert(roomAmenitiesInsert);
+
+      if (amenityError) throw new Error('Room amenity insert error: ' + amenityError.message);
       // router.push(`/hotels/${hotelId}/add-room`);
     }
 

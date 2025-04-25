@@ -69,7 +69,8 @@ export default function ImageUploadForm({ formData, onUpdate }) {
         image_url: imageUrls,
         admin_id: userTable.guid 
       },
-    ]);
+    ])
+    
 
     if (error) {
       console.error('Hotel creation error:', error.message);
