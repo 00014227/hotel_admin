@@ -38,7 +38,7 @@ export default function GetInitialState({ children }) {
       if (!isAuthenticated) {
         router.push('/auth')
       } else if (path === '/' || path.includes('/auth')) {
-        router.push('/hotel_register')
+        router.push('/dashboard')
       }
     }
 

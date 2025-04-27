@@ -197,7 +197,7 @@ export default function ReservationTable() {
                   </td>
                   <td className="p-2">
                     {res.payments?.length > 0
-                      ? `$${res.payments[0].amount} on ${new Date(res.payments[0].created_at).toLocaleDateString()}`
+                      ? `$${res.payments[0].amount / 100}`
                       : '—'}
                   </td>
                 </tr>

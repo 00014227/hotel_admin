@@ -7,14 +7,46 @@ import AvailabilityManager from './components/AvailabilityManager';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState(null);
-  const [reservations, setReservations] = useState([]);
+  const [stats, setStats] = useState({
+    hotels: 0,
+    rooms: 0,
+    users: 0,
+    bookings: 0,
+  });
+    const [reservations, setReservations] = useState([]);
   const [hotels, setHotels] = useState([]);
 
   useEffect(() => {
     const fetchStats = async () => {
-      setStats({ hotels: 5, rooms: 20, users: 120, bookings: 43 });
+      try {
+        const { count: hotelsCount } = await supabase
+          .from('hotels')
+          .select('*', { count: 'exact', head: true });
+
+        const { count: roomsCount } = await supabase
+          .from('rooms')
+          .select('*', { count: 'exact', head: true });
+
+        const { count: usersCount } = await supabase
+          .from('users')
+          .select('*', { count: 'exact', head: true });
+
+        const { count: bookingsCount } = await supabase
+          .from('bookings')
+          .select('*', { count: 'exact', head: true });
+
+        setStats({
+          hotels: hotelsCount || 0,
+          rooms: roomsCount || 0,
+          users: usersCount || 0,
+          bookings: bookingsCount || 0,
+        });
+      } catch (error) {
+        console.error('Error fetching stats:', error.message);
+      }
     };
+
+
 
     const fetchReservations = async () => {
       setReservations([

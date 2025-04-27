@@ -12,9 +12,15 @@ export default function Navbar() {
                 <div className="flex justify-between items-center">
                     <p className="text-gray-600 text-lg font-bold">Booking.uz</p>
                     <div className="flex space-x-4">
-                        <button className=" text-gray-600 px-8 py-2 rounded-3xl hover:bg-gray-200">
+                        <Link href={"/dashboard"} className="flex items-center text-gray-600 px-8 py-2 rounded-3xl hover:bg-gray-200">
+                            Dashboard
+                        </Link>
+                        <Link href={"/register_hotel"} className="flex items-center text-gray-600 px-8 py-2 rounded-3xl hover:bg-gray-200">
                             Register Hotel
-                        </button>
+                        </Link>
+                        <Link href={"/chat"} className="flex items-center text-gray-600 px-8 py-2 rounded-3xl hover:bg-gray-200">
+                            Guest Requests
+                        </Link>
 
                         {user?.user.email ? (
                             <NavbarUserDesktop userAuth={user} />
