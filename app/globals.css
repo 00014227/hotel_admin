@@ -76,3 +76,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1.1rem;
+}
+
+.react-calendar__tile {
+  height: 80px;
+  border-radius: 12px;
+  transition: background 0.3s;
+}
+
+.react-calendar__tile--active {
+  background: #3b82f6;
+  color: white;
+  border-radius: 12px;
+}
+
+.react-calendar__tile:hover {
+  background: #dbeafe;
+}

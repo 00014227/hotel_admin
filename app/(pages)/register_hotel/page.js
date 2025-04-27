@@ -22,7 +22,7 @@ export default function RegisterHotel() {
   };
 
   const nextStep = () => setStep((s) => s + 1);
-
+  console.log(formData, 'finaaal')
   return (
     <div>
       {step === 1 && (

@@ -1,15 +1,17 @@
 'use client';
 
 import { supabase } from '@/app/lib/supabaseClient';
+import { useParams, useRouter } from 'next/navigation';
 import postcss from 'postcss';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function ImageUploadForm({ formData, onUpdate }) {
+  const {id} = useParams()
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const { userTable } = useSelector((state) => state.auth)
-
+  const router = useRouter()
   console.log(userTable, 'qoto')
   const handleImageChange = (e) => {
     if (e.target.files) {
@@ -51,37 +53,37 @@ export default function ImageUploadForm({ formData, onUpdate }) {
     const imageUrls = await uploadImages();
 
     const { address, hotelInfo, amenities, location } = formData;
-    const { data, error } = await supabase.from('hotels').insert([
-      {
-        name: hotelInfo.hotelName,
-        description: hotelInfo.description,
-        price: hotelInfo.price,
-        rating: hotelInfo.rating,
-        pets_allowed: hotelInfo.petsAllowed,
-        address: {
-          full: address.street,
-          region: address.city,
-          street: address.street,
-          country: address.country,
-          postalCode: address.postalCode
-        },
-        location: {
-          lat: location.lat,
-          lng: location.lng
-        },
-        amenities,
-        image_url: imageUrls,
-        admin_id: userTable.guid 
+    const { data, error } = await supabase
+    .from('hotels')
+    .update({
+      name: hotelInfo.hotelName,
+      description: hotelInfo.description,
+      price: hotelInfo.price,
+      rating: hotelInfo.rating,
+      pets_allowed: hotelInfo.petsAllowed,
+      address: {
+        full: address.street,
+        region: address.city,
+        street: address.street,
+        country: address.country,
+        postalCode: address.postalCode
       },
-    ])
-    
+      location: {
+        lat: location.lat,
+        lng: location.lng
+      },
+      amenities: amenities, // array of amenity IDs or objects
+      image_url: imageUrls,  // array of URLs
+      admin_id: userTable.guid
+    })
+    .eq('id', id)  // 🛠️ important: find the hotel by ID
+  
 
     if (error) {
       console.error('Hotel creation error:', error.message);
     } else {
       console.log('✅ Hotel created:', data);
-      const hotelId = data[0].id;
-      router.push(`/hotels/${hotelId}/add-room`);
+      router.push(`/dashboard`);
     }
 
     setLoading(false);
